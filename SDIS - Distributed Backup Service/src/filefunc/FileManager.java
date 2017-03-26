@@ -84,42 +84,68 @@ public class FileManager
 			}
 		}
 	}
-	
+
 	public String rightpad(String text, int length) {
-	    return String.format("%-" + length + "." + length + "s", text);
+		return String.format("%-" + length + "." + length + "s", text);
 	}
 
-	public void list()
-	{
+	public int printAllFilesStored(int option){
+
 		Ufile temp;
 		int i=0;
 
 		System.out.println("\n**************************************************");
-		System.out.println("-> Files Stored : \n" );
+		if(!fileList.isEmpty()){
 
-		for (Iterator<Ufile> it = fileList.iterator(); it.hasNext(); i++)
-		{
-			temp = it.next();
-			if(i == 0)
-			System.out.println("Number  Name\t\t\t\tSize");
+			System.out.printf("-> Files Stored to ");
+
+			switch(option){
+			case 1:
+				System.out.printf("backup");
+				break;
+			case 2:
+				System.out.printf("restore");
+				break;
+			case 3:
+				System.out.printf("delete");
+				break;
+			}
+
+			System.out.println(" : \n" );
 
 
-			System.out.printf("%d\t", i);
-			
-			if(temp.fileName().length() > 22)
-				System.out.printf("%s...", temp.fileName().subSequence(0, 22));
-			else System.out.printf("%25s", rightpad(temp.fileName(), 25));
+			for (Iterator<Ufile> it = fileList.iterator(); it.hasNext(); i++){
+				temp = it.next();
+				if(i == 0)
+					System.out.println("Number  Name\t\t\t\tSize - bytes");
 
-			System.out.printf("\t%d", temp.fileSize());  
 
-			if(temp instanceof BackupFile)
-				System.out.printf("[backup]");
-			System.out.println("");
+				System.out.printf("%d\t", i);
 
+				if(temp.fileName().length() > 22)
+					System.out.printf("%s...", temp.fileName().subSequence(0, 22));
+				else System.out.printf("%25s", rightpad(temp.fileName(), 25));
+
+				System.out.printf("\t%d", temp.fileSize());  
+
+				if(temp instanceof BackupFile)
+					System.out.printf("[backup]");
+				System.out.println("");
+
+			}
+			if(i == 1)
+				System.out.printf("\nTotal: %d file\n", i);
+			else
+				System.out.printf("\nTotal: %d files\n", i);
+		}else{
+
+			System.out.printf("\nNo files in current directory!\n");
+			System.out.println("\n**************************************************");
+			return -1;
 		}
-		System.out.printf("\n\nTotal: %d files\n", i);
 
 		System.out.println("\n**************************************************");
+		return 0;
 	}
 
 	public void addSTORED(String address, String fileId, int chunkNo)
@@ -177,6 +203,19 @@ public class FileManager
 		b.split();
 
 		return b;
+	} 	
+	
+	public void menu(){
+		
+		System.out.println("\n**************************************************");
+		System.out.println(" \t   Distributed Backup Service");
+		System.out.println("**************************************************");
+		System.out.println("");
+		System.out.println("1 - Backup File");
+		System.out.println("2 - Restore File");
+		System.out.println("3 - Delete File\n");
+		System.out.println("0 - Quit\n");
+		System.out.printf("Option [0-3] > ");
 	}
 
 }

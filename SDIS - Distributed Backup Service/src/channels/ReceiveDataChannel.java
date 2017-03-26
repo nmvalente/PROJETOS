@@ -11,15 +11,15 @@ import protocols.Peer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ReceiveRestoreChannel extends Thread
+public class ReceiveDataChannel extends Thread
 {
 	public static final int MAXBUFFER = 1024;
 
 	String name;
 	MulticastSocket socket;
-	Peer peer;
+	Peer peer; 
 
-	public ReceiveRestoreChannel(String name, MulticastSocket s, Peer peer)
+	public ReceiveDataChannel(String name, MulticastSocket s, Peer peer)
 	{
 		this.name = name;
 		this.socket = s;

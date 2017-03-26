@@ -27,8 +27,8 @@ public class Peer
 
     public String getLocalhost() { return localhost; }
 
-    public void backup()
-    {
+    public int backup(){
+    	
         BackupFile b;
 
         Scanner in = new Scanner(System.in);
@@ -43,14 +43,15 @@ public class Peer
         String msg = null;
 
         // Lista de ficheiros
-        files.list();
+        if(files.printAllFilesStored(1) == -1)
+        	return -1;
 
         // receber index
         fsize = files.getFileList().size();
-        System.out.println("\n Option [0" + ((fsize>0)?"-"+Math.max(0,fsize-1):"") + "] ~ ");        index = in.nextInt();
+        System.out.printf("\nOption [0" + ((fsize>0)?"-"+Math.max(0,fsize-1):"") + "] > ");        index = in.nextInt();
 
         // receber desiredReplicationDeg
-        System.out.println("\n Replication Degree [1-9] ~ ");
+        System.out.printf("\nReplication Degree [1-9] > ");
         desiredReplicationDeg = in.nextInt();
 
         // validar index
@@ -119,10 +120,12 @@ public class Peer
         {
             System.out.println(" Invalid file index.");
         }
+        
+        return 0;
     }
 
-    public void restore()
-    {
+    public int restore(){
+    	
         BackupFile b;
 
         Scanner in = new Scanner(System.in);
@@ -134,7 +137,8 @@ public class Peer
         String msg = null;
 
         // Lista de ficheiros
-        files.list();
+        if(files.printAllFilesStored(2) == -1)
+        	return -1;
 
         // receber index
         fsize = files.getFileList().size();
@@ -198,10 +202,12 @@ public class Peer
         {
             System.out.println(" Invalid file index.");
         }
+        
+        return 0;
     }
 
-    public void delete()
-    {
+    public int delete(){
+    	
         BackupFile b;
 
         Scanner in = new Scanner(System.in);
@@ -212,7 +218,8 @@ public class Peer
         String msg = null;
 
         // Lista de ficheiros
-        files.list();
+        if(files.printAllFilesStored(3) == -1)
+        	return -1;
 
         // receber index
         fsize = files.getFileList().size();
@@ -246,6 +253,7 @@ public class Peer
         {
             System.out.println("Invalid file index.");
         }
+        return 0;
     }
 
 }
