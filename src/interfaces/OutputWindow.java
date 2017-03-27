@@ -1,8 +1,6 @@
 package interfaces;
-// source from http://stackoverflow.com/questions/28109509/java-start-sub-process-with-own-terminal
 
 import javax.swing.*;
-
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
@@ -10,7 +8,6 @@ import java.io.*;
 
 public class OutputWindow implements Runnable {
 
-    private String title;
     private JFrame Windows;
     private JTextArea outputAreaSender;
     private JTextArea outputAreaReceiverMC;
@@ -20,7 +17,6 @@ public class OutputWindow implements Runnable {
     private JScrollPane scrollPaneReceiverMC;
     private JScrollPane scrollPaneReceiverMB;
     private JScrollPane scrollPaneReceiverMR;
-
 
     public OutputWindow() {
     	
@@ -39,8 +35,8 @@ public class OutputWindow implements Runnable {
 
     @Override
     public void run() {
-        Windows = new JFrame(this.title);
-        Windows.setAlwaysOnTop(true);
+        Windows = new JFrame();
+        Windows.setAlwaysOnTop(false);
 		Windows.setIconImage(Toolkit.getDefaultToolkit().getImage("..\\Upload-to_Cloud-512.png"));
 		Windows.setResizable(false);
 		Windows.setTitle("SDIS - Distributed Backup Service"); 
