@@ -5,6 +5,7 @@ import java.net.MulticastSocket;
 
 import javax.swing.SwingUtilities;
 
+import interfaces.Main;
 import interfaces.OutputWindow;
 import protocols.Peer;
 
@@ -17,7 +18,7 @@ public class ReceiveDataChannel extends Thread
 
 	String name;
 	MulticastSocket socket;
-	Peer peer; 
+	Peer peer;
 
 	public ReceiveDataChannel(String name, MulticastSocket s, Peer peer)
 	{
@@ -36,16 +37,24 @@ public class ReceiveDataChannel extends Thread
 
 	public void run()
 	{
-		OutputWindow console = new OutputWindow("Thread Receiver :: " + name );
-		SwingUtilities.invokeLater(console);
-
 		try
 		{
-			console.println(getCTS() + " - Started receiver thread :: "+ name);
+			if(name == "MC")
+				Main.windows.printlnReceiverMC(getCTS() + " - Started receiver thread :: "+ name);
+			if(name == "MDB")
+				Main.windows.printlnReceiverMB(getCTS() + " - Started receiver thread :: "+ name);
+			if(name == "MDR")
+				Main.windows.printlnReceiverMR(getCTS() + " - Started receiver thread :: "+ name);
+		
 		}
 		catch (ArithmeticException ex)
 		{
-			console.printStackTrace(ex);
+			if(name == "MC")
+				Main.windows.printStackTraceReceiverMC(ex); 
+			if(name == "MDB")
+				Main.windows.printStackTraceReceiverMB(ex);
+			if(name == "MDR")
+				Main.windows.printStackTraceReceiverMR(ex);
 		}
 
 		try
@@ -54,8 +63,6 @@ public class ReceiveDataChannel extends Thread
 			DatagramPacket dg;
 			String dgString;
 			String msg;// char
-
-			//socket.setSoTimeout(400);
 
 			do
 			{
@@ -67,22 +74,30 @@ public class ReceiveDataChannel extends Thread
 				socket.receive(dg);
 				dgString = new String( dg.getData() );
 
-//				console.println(peer.getLocalhost());
-//				console.println(dg.getAddress().toString());
-
 				if ( !dg.getAddress().toString().substring(1).equals(peer.getLocalhost()) )
 				{
 					msg = peer.inbox.newMessage(dg.getAddress().toString(), dg.getPort() , dgString );
 
 					try
 					{
-						console.println(getCTS() + " - RECEIVED - " + msg);
-					}
+						
+						if(name == "MC")
+							Main.windows.printlnReceiverMC(getCTS() + " - RECEIVED - " + msg);
+						if(name == "MDB")
+							Main.windows.printlnReceiverMB(getCTS() + " - RECEIVED - " + msg);
+						if(name == "MDR")
+							Main.windows.printlnReceiverMR(getCTS() + " - RECEIVED - " + msg);
+											}
 					catch (ArithmeticException ex)
 					{
-						console.printStackTrace(ex);
+						if(name == "MC")
+							Main.windows.printStackTraceReceiverMC(ex); 
+						if(name == "MDB")
+							Main.windows.printStackTraceReceiverMB(ex);
+						if(name == "MDR")
+							Main.windows.printStackTraceReceiverMR(ex);
 					}
-				}
+				} 
 
 				try
 				{
@@ -95,10 +110,14 @@ public class ReceiveDataChannel extends Thread
 			} while(true);
 
 		}
-		catch(IOException n)
+		catch(IOException n) 
 		{
-			console.println(getCTS() + " - Connection terminated");
-			//n.printStackTrace();
+			if(name == "MC")
+				Main.windows.printlnReceiverMC(getCTS() + " - Connection terminated");
+			if(name == "MDB")
+				Main.windows.printlnReceiverMB(getCTS() + " - Connection terminated");
+			if(name == "MDR")
+				Main.windows.printlnReceiverMR(getCTS() + " - Connection terminated");
 		}
 	}
 }

@@ -1,7 +1,5 @@
 package channels;
 
-import javax.swing.*;
-
 import filefunc.*;
 import interfaces.*;
 import message.Message;
@@ -49,16 +47,14 @@ public class SendDataChannel extends Thread
 
 	public void run()
 	{
-		OutputWindow console = new OutputWindow("Thread Sender");
-		SwingUtilities.invokeLater(console);
 
 		try
 		{
-			console.println( getCTS() + " - Started sender thread" );
+			Main.windows.printlnSendChannel( getCTS() + " - Started sender thread" );
 		}
 		catch (ArithmeticException ex)
 		{
-			console.printStackTrace(ex);
+			Main.windows.printStackTraceSendChannel(ex);
 		}
 
 		try {
@@ -117,11 +113,11 @@ public class SendDataChannel extends Thread
 
 							try
 							{
-								console.println( getCTS() + " - REQUEST SENT - " + m.simple() );
+								Main.windows.printlnSendChannel( getCTS() + " - REQUEST SENT - " + m.simple() );
 							}
 							catch (ArithmeticException ex)
 							{
-								console.printStackTrace(ex);
+								Main.windows.printStackTraceSendChannel(ex);
 							}
 						}
 					}
@@ -187,21 +183,21 @@ public class SendDataChannel extends Thread
 
 							try
 							{
-								console.println( getCTS() + " -   REPLY SENT - " + m.reply() );
+								Main.windows.printlnSendChannel( getCTS() + " -   REPLY SENT - " + m.reply() );
 							}
 							catch (ArithmeticException ex)
 							{
-								console.printStackTrace(ex);
+								Main.windows.printStackTraceSendChannel(ex);
 							}
 						}
-					}
+					} 
 				}
 
 			} while (true);
 		}
-		catch(IOException e)
+		catch(IOException e) 
 		{
-			console.println(getCTS() + " - Connection terminated");
+			Main.windows.printlnSendChannel(getCTS() + " - Connection terminated");
 			// e.getMessage();
 		}
 	}

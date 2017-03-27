@@ -1,8 +1,11 @@
 package interfaces;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.Scanner;
+
+import javax.swing.SwingUtilities;
 
 import channels.*;
 import filefunc.*;
@@ -11,8 +14,9 @@ import protocols.Peer;
 public class Main
 {
 	public static boolean exitNow = false;
+	public static OutputWindow windows;
 
-	public static void main(String[] args) throws IOException, InterruptedException
+	public static void main(String[] args) throws IOException, InterruptedException, InvocationTargetException
 	{
 		// "program mcAddress mcPort mdbAddress mdbPort mdrAddress mdrPort
 		// 224.0.0.1 1110 224.0.0.2 1111 224.0.0.3 1112
@@ -56,6 +60,9 @@ public class Main
 		ms[2] = new MulticastSocket(Integer.parseInt( port ));
 		ms[2].joinGroup(group[2]);
 
+		windows = new OutputWindow();
+
+		
 		// Configuracao de Threads
 		ReceiveDataChannel trMC   = new ReceiveDataChannel("MC" ,ms[0],peer);		// thread de recolha MC
 		ReceiveDataChannel trMDB  = new ReceiveDataChannel("MDB",ms[1],peer);		// thread de recolha MDB
@@ -67,6 +74,9 @@ public class Main
 		trMDB.start();
 		trMDR.start();
 		trWORK.start();
+
+		SwingUtilities.invokeAndWait(windows);
+
 
 		Scanner in = new Scanner(System.in);
 		int option;

@@ -2,89 +2,153 @@ package interfaces;
 // source from http://stackoverflow.com/questions/28109509/java-start-sub-process-with-own-terminal
 
 import javax.swing.*;
+
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.io.*;
 
 public class OutputWindow implements Runnable {
 
     private String title;
-    private JFrame frame;
-    private JTextArea outputArea;
-    private JScrollPane scrollPane;
+    private JFrame Windows;
+    private JTextArea outputAreaSender;
+    private JTextArea outputAreaReceiverMC;
+    private JTextArea outputAreaReceiverMB;
+    private JTextArea outputAreaReceiverMR;
+    private JScrollPane scrollPaneSender;
+    private JScrollPane scrollPaneReceiverMC;
+    private JScrollPane scrollPaneReceiverMB;
+    private JScrollPane scrollPaneReceiverMR;
 
-    public OutputWindow(String title, boolean redirectStreams) {
-        this.title = title;
-        this.outputArea = new JTextArea(12, 100);
-        this.outputArea.setEditable(false);
 
-        if (redirectStreams)
-            redirectSystemStreams();
-    }
-
-    public OutputWindow(String title) {
-        this(title, false);
+    public OutputWindow() {
+    	
+        this.outputAreaSender = new JTextArea(12, 100);
+        this.outputAreaSender.setEditable(false);
+        
+        this.outputAreaReceiverMC = new JTextArea(12, 100);
+        this.outputAreaReceiverMC.setEditable(false);
+        
+        this.outputAreaReceiverMB = new JTextArea(12, 100);
+        this.outputAreaReceiverMB.setEditable(false);
+        
+        this.outputAreaReceiverMR = new JTextArea(12, 100);
+        this.outputAreaReceiverMR.setEditable(false);
     }
 
     @Override
     public void run() {
-        frame = new JFrame(this.title);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Windows = new JFrame(this.title);
+        Windows.setAlwaysOnTop(true);
+		Windows.setIconImage(Toolkit.getDefaultToolkit().getImage("..\\Upload-to_Cloud-512.png"));
+		Windows.setResizable(false);
+		Windows.setTitle("SDIS - Distributed Backup Service"); 
+		Windows.setBackground(Color.WHITE);
+		Windows.setBounds(0, 0, 1125, 840);
+		Windows.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Windows.setLayout(null);
+		
+        scrollPaneSender = new JScrollPane(outputAreaSender);
+        JPanel outputPanelSender = new JPanel(new FlowLayout());
+        outputPanelSender.setBounds(0, 0, 1120, 200);
+        outputPanelSender.add(scrollPaneSender);
+        
+        scrollPaneReceiverMC = new JScrollPane(outputAreaReceiverMC);
+        JPanel outputPanelReceiverMC = new JPanel(new FlowLayout());
+        outputPanelReceiverMC.setBounds(0, 200, 1120, 200);
+        outputPanelReceiverMC.add(scrollPaneReceiverMC);
+        
+        scrollPaneReceiverMB = new JScrollPane(outputAreaReceiverMB);
+        JPanel outputPanelReceiverMB = new JPanel(new FlowLayout());
+        outputPanelReceiverMB.setBounds(0, 400, 1120, 200);
+        outputPanelReceiverMB.add(scrollPaneReceiverMB);
+        
+        scrollPaneReceiverMR = new JScrollPane(outputAreaReceiverMR);
+        JPanel outputPanelReceiverMR = new JPanel(new FlowLayout());
+        outputPanelReceiverMR.setBounds(0, 600, 1120, 200);
+        outputPanelReceiverMR.add(scrollPaneReceiverMR);
 
-        scrollPane = new JScrollPane(outputArea);
-        JPanel outputPanel = new JPanel(new FlowLayout());
-        outputPanel.add(scrollPane);
-
-        frame.add(outputPanel);
-        frame.pack();
-        frame.setVisible(true);
+        Windows.add(outputPanelSender);
+        Windows.add(outputPanelReceiverMC);
+        Windows.add(outputPanelReceiverMB);
+        Windows.add(outputPanelReceiverMR);
+        Windows.setVisible(true);
     }
 
-    private void updateTextArea(final String text) {
+    private void updateTextSender(final String text) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                outputArea.append(text);
+                outputAreaSender.append(text);
+            }
+        });
+    }
+    
+    private void updateTextReceiverMC(final String text) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                outputAreaReceiverMC.append(text);
+            }
+        });
+    }
+    
+    private void updateTextReceiverMB(final String text) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                outputAreaReceiverMB.append(text);
+            }
+        });
+    }
+    
+    private void updateTextReceiverMR(final String text) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                outputAreaReceiverMR.append(text);
             }
         });
     }
 
-    private void redirectSystemStreams() {
-        OutputStream out = new OutputStream() {
-            @Override
-            public void write(int b) throws IOException {
-                updateTextArea(String.valueOf((char) b));
-            }
-
-            @Override
-            public void write(byte[] b, int off, int len) throws IOException {
-                updateTextArea(new String(b, off, len));
-            }
-
-            @Override
-            public void write(byte[] b) throws IOException {
-                write(b, 0, b.length);
-            }
-        };
-
-        System.setOut(new PrintStream(out, true));
-        System.setErr(new PrintStream(out, true));
+    public void printlnSendChannel(String msg) {
+        updateTextSender(msg + "\n");
     }
-
-    public void println(String msg) {
-        updateTextArea(msg + "\n");
+    
+    public void printlnReceiverMC(String msg) {
+        updateTextReceiverMC(msg + "\n");
     }
-
-    public void println(Throwable t) {
-        println(t.toString());
+    
+    public void printlnReceiverMB(String msg) {
+        updateTextReceiverMB(msg + "\n");
     }
-
-    public void print(String msg) {
-        updateTextArea(msg);
+    
+    public void printlnReceiverMR(String msg) {
+        updateTextReceiverMR(msg + "\n");
     }
-
-    public void printStackTrace(Throwable t) {
+    
+    public void printStackTraceSendChannel(Throwable t) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         t.printStackTrace(pw);
-        this.println(sw.toString());
+        this.printlnSendChannel(sw.toString());
+    }
+
+    public void printStackTraceReceiverMC(Throwable t) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        t.printStackTrace(pw);
+        this.printlnReceiverMC(sw.toString());
+    }
+    
+    public void printStackTraceReceiverMB(Throwable t) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        t.printStackTrace(pw);
+        this.printlnReceiverMB(sw.toString());
+    }
+    
+    public void printStackTraceReceiverMR(Throwable t) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        t.printStackTrace(pw);
+        this.printlnReceiverMR(sw.toString());
     }
 }
