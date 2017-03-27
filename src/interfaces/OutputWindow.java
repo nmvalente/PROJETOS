@@ -11,12 +11,12 @@ public class OutputWindow implements Runnable {
     private JFrame Windows;
     private JTextArea outputAreaSender;
     private JTextArea outputAreaReceiverMC;
-    private JTextArea outputAreaReceiverMB;
-    private JTextArea outputAreaReceiverMR;
+    private JTextArea outputAreaReceiverMDB;
+    private JTextArea outputAreaReceiverMDR;
     private JScrollPane scrollPaneSender;
     private JScrollPane scrollPaneReceiverMC;
-    private JScrollPane scrollPaneReceiverMB;
-    private JScrollPane scrollPaneReceiverMR;
+    private JScrollPane scrollPaneReceiverMDB;
+    private JScrollPane scrollPaneReceiverMDR;
 
     public OutputWindow() {
     	
@@ -26,11 +26,11 @@ public class OutputWindow implements Runnable {
         this.outputAreaReceiverMC = new JTextArea(12, 100);
         this.outputAreaReceiverMC.setEditable(false);
         
-        this.outputAreaReceiverMB = new JTextArea(12, 100);
-        this.outputAreaReceiverMB.setEditable(false);
+        this.outputAreaReceiverMDB = new JTextArea(12, 100);
+        this.outputAreaReceiverMDB.setEditable(false);
         
-        this.outputAreaReceiverMR = new JTextArea(12, 100);
-        this.outputAreaReceiverMR.setEditable(false);
+        this.outputAreaReceiverMDR = new JTextArea(12, 100);
+        this.outputAreaReceiverMDR.setEditable(false);
     }
 
     @Override
@@ -55,20 +55,20 @@ public class OutputWindow implements Runnable {
         outputPanelReceiverMC.setBounds(0, 200, 1120, 200);
         outputPanelReceiverMC.add(scrollPaneReceiverMC);
         
-        scrollPaneReceiverMB = new JScrollPane(outputAreaReceiverMB);
-        JPanel outputPanelReceiverMB = new JPanel(new FlowLayout());
-        outputPanelReceiverMB.setBounds(0, 400, 1120, 200);
-        outputPanelReceiverMB.add(scrollPaneReceiverMB);
+        scrollPaneReceiverMDB = new JScrollPane(outputAreaReceiverMDB);
+        JPanel outputPanelReceiverMDB = new JPanel(new FlowLayout());
+        outputPanelReceiverMDB.setBounds(0, 400, 1120, 200);
+        outputPanelReceiverMDB.add(scrollPaneReceiverMDB);
         
-        scrollPaneReceiverMR = new JScrollPane(outputAreaReceiverMR);
-        JPanel outputPanelReceiverMR = new JPanel(new FlowLayout());
-        outputPanelReceiverMR.setBounds(0, 600, 1120, 200);
-        outputPanelReceiverMR.add(scrollPaneReceiverMR);
+        scrollPaneReceiverMDR = new JScrollPane(outputAreaReceiverMDR);
+        JPanel outputPanelReceiverMDR = new JPanel(new FlowLayout());
+        outputPanelReceiverMDR.setBounds(0, 600, 1120, 200);
+        outputPanelReceiverMDR.add(scrollPaneReceiverMDR);
 
         Windows.add(outputPanelSender);
         Windows.add(outputPanelReceiverMC);
-        Windows.add(outputPanelReceiverMB);
-        Windows.add(outputPanelReceiverMR);
+        Windows.add(outputPanelReceiverMDB);
+        Windows.add(outputPanelReceiverMDR);
         Windows.setVisible(true);
     }
 
@@ -91,7 +91,7 @@ public class OutputWindow implements Runnable {
     private void updateTextReceiverMB(final String text) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                outputAreaReceiverMB.append(text);
+                outputAreaReceiverMDB.append(text);
             }
         });
     }
@@ -99,7 +99,7 @@ public class OutputWindow implements Runnable {
     private void updateTextReceiverMR(final String text) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                outputAreaReceiverMR.append(text);
+                outputAreaReceiverMDR.append(text);
             }
         });
     }
@@ -112,11 +112,11 @@ public class OutputWindow implements Runnable {
         updateTextReceiverMC(msg + "\n");
     }
     
-    public void printlnReceiverMB(String msg) {
+    public void printlnReceiverMDB(String msg) {
         updateTextReceiverMB(msg + "\n");
     }
     
-    public void printlnReceiverMR(String msg) {
+    public void printlnReceiverMDR(String msg) {
         updateTextReceiverMR(msg + "\n");
     }
     
@@ -134,17 +134,17 @@ public class OutputWindow implements Runnable {
         this.printlnReceiverMC(sw.toString());
     }
     
-    public void printStackTraceReceiverMB(Throwable t) {
+    public void printStackTraceReceiverMDB(Throwable t) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         t.printStackTrace(pw);
-        this.printlnReceiverMB(sw.toString());
+        this.printlnReceiverMDB(sw.toString());
     }
     
-    public void printStackTraceReceiverMR(Throwable t) {
+    public void printStackTraceReceiverMDR(Throwable t) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         t.printStackTrace(pw);
-        this.printlnReceiverMR(sw.toString());
-    }
+        this.printlnReceiverMDR(sw.toString());
+    } 
 }

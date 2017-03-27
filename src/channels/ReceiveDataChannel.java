@@ -39,9 +39,9 @@ public class ReceiveDataChannel extends Thread
 			if(name == "MC")
 				Main.windows.printlnReceiverMC(getCTS() + " - Started receiver thread :: "+ name);
 			if(name == "MDB")
-				Main.windows.printlnReceiverMB(getCTS() + " - Started receiver thread :: "+ name);
+				Main.windows.printlnReceiverMDB(getCTS() + " - Started receiver thread :: "+ name);
 			if(name == "MDR")
-				Main.windows.printlnReceiverMR(getCTS() + " - Started receiver thread :: "+ name);
+				Main.windows.printlnReceiverMDR(getCTS() + " - Started receiver thread :: "+ name);
 		
 		}
 		catch (ArithmeticException ex)
@@ -49,9 +49,9 @@ public class ReceiveDataChannel extends Thread
 			if(name == "MC")
 				Main.windows.printStackTraceReceiverMC(ex); 
 			if(name == "MDB")
-				Main.windows.printStackTraceReceiverMB(ex);
+				Main.windows.printStackTraceReceiverMDB(ex);
 			if(name == "MDR")
-				Main.windows.printStackTraceReceiverMR(ex);
+				Main.windows.printStackTraceReceiverMDR(ex);
 		}
 
 		try
@@ -81,18 +81,18 @@ public class ReceiveDataChannel extends Thread
 						if(name == "MC")
 							Main.windows.printlnReceiverMC(getCTS() + " - RECEIVED - " + msg);
 						if(name == "MDB")
-							Main.windows.printlnReceiverMB(getCTS() + " - RECEIVED - " + msg);
+							Main.windows.printlnReceiverMDB(getCTS() + " - RECEIVED - " + msg);
 						if(name == "MDR")
-							Main.windows.printlnReceiverMR(getCTS() + " - RECEIVED - " + msg);
+							Main.windows.printlnReceiverMDR(getCTS() + " - RECEIVED - " + msg);
 											}
 					catch (ArithmeticException ex)
 					{
 						if(name == "MC")
 							Main.windows.printStackTraceReceiverMC(ex); 
 						if(name == "MDB")
-							Main.windows.printStackTraceReceiverMB(ex);
+							Main.windows.printStackTraceReceiverMDB(ex);
 						if(name == "MDR")
-							Main.windows.printStackTraceReceiverMR(ex);
+							Main.windows.printStackTraceReceiverMDR(ex);
 					}
 				} 
 
@@ -112,9 +112,9 @@ public class ReceiveDataChannel extends Thread
 			if(name == "MC")
 				Main.windows.printlnReceiverMC(getCTS() + " - Connection terminated");
 			if(name == "MDB")
-				Main.windows.printlnReceiverMB(getCTS() + " - Connection terminated");
+				Main.windows.printlnReceiverMDB(getCTS() + " - Connection terminated");
 			if(name == "MDR")
-				Main.windows.printlnReceiverMR(getCTS() + " - Connection terminated");
+				Main.windows.printlnReceiverMDR(getCTS() + " - Connection terminated");
 		}
 	}
 }

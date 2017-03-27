@@ -33,47 +33,50 @@ public class Main
 		String 	address = null,
 				port 	= null;
 
-		MulticastSocket[] ms = new MulticastSocket[3];
+		MulticastSocket[] multicastSockets = new MulticastSocket[3];
 		InetAddress[] group = new InetAddress[3];
+		
 
-		// Configuração do socket para MC --------------------
+		// Configuracao do socket para MC --------------------
 		address = args[0];
 		port    = args[1];
 
 		group[0] = InetAddress.getByName( address );
-		ms[0] = new MulticastSocket(Integer.parseInt( port ));
-		ms[0].joinGroup(group[0]);
+		multicastSockets[0] = new MulticastSocket(Integer.parseInt( port ));
+		multicastSockets[0].joinGroup(group[0]);
 
-		// Configuração do socket para MDB -------------------
+		// Configuracao do socket para MDB -------------------
 		address = args[2];
 		port    = args[3];
 
 		group[1] = InetAddress.getByName( address );
-		ms[1] = new MulticastSocket(Integer.parseInt( port ));
-		ms[1].joinGroup(group[1]);
+		multicastSockets[1] = new MulticastSocket(Integer.parseInt( port ));
+		multicastSockets[1].joinGroup(group[1]);
 
 		// Configuracao do socket para MDR -------------------
 		address = args[4];
 		port    = args[5];
 
 		group[2] = InetAddress.getByName( address );
-		ms[2] = new MulticastSocket(Integer.parseInt( port ));
-		ms[2].joinGroup(group[2]);
+		multicastSockets[2] = new MulticastSocket(Integer.parseInt( port ));
+		multicastSockets[2].joinGroup(group[2]);
 
 		windows = new OutputWindow();
 
 		
-		// Configuracao de Threads
-		ReceiveDataChannel trMC   = new ReceiveDataChannel("MC" ,ms[0],peer);		// thread de recolha MC
-		ReceiveDataChannel trMDB  = new ReceiveDataChannel("MDB",ms[1],peer);		// thread de recolha MDB
-		ReceiveDataChannel trMDR  = new ReceiveDataChannel("MDR",ms[2],peer); 		// thread de recolha MDR
-		SendDataChannel   trWORK = new SendDataChannel  (group,ms,peer);    // thread de trabalho e envio
+		// configuracao de Threads
+		
+		ReceiveDataChannel MCchannel   = new ReceiveDataChannel("MC" ,multicastSockets[0],peer);
+		ReceiveDataChannel MDBchannel  = new ReceiveDataChannel("MDB",multicastSockets[1],peer);
+		ReceiveDataChannel MDRchannel  = new ReceiveDataChannel("MDR",multicastSockets[2],peer);
+		SendDataChannel   SENDchannel = new SendDataChannel  (group,multicastSockets,peer);
 
 		// Inicio de threads
-		trMC.start();
-		trMDB.start();
-		trMDR.start();
-		trWORK.start();
+		
+		MCchannel.start();
+		MDBchannel.start();
+		MDRchannel.start();
+		SENDchannel.start();
 
 		SwingUtilities.invokeAndWait(windows);
 
@@ -122,16 +125,16 @@ public class Main
 		System.out.println("Turning off...");
 		
 		// desliga o socket de MC
-		ms[0].leaveGroup(group[0]);
-		ms[0].close();
+		multicastSockets[0].leaveGroup(group[0]);
+		multicastSockets[0].close();
 
 		// desliga o socket de MDB
-		ms[1].leaveGroup(group[1]);
-		ms[1].close();
+		multicastSockets[1].leaveGroup(group[1]);
+		multicastSockets[1].close();
 
 		// desliga o socket de MDR
-		ms[2].leaveGroup(group[2]);
-		ms[2].close();
+		multicastSockets[2].leaveGroup(group[2]);
+		multicastSockets[2].close();
 		
 		System.exit(0);
 	}
