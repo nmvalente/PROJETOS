@@ -3,10 +3,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 
-import javax.swing.SwingUtilities;
-
 import interfaces.Main;
-import interfaces.OutputWindow;
 import protocols.Peer;
 
 import java.text.SimpleDateFormat;
