@@ -22,6 +22,7 @@ mkdir -p $BIN
 echo "-------------Compiling-----------"
 javac -d $BIN src/channels/*.java src/filefunc/*.java src/interfaces/*.java src/message/*.java src/protocols/*.java
 echo "-------------Running-------------"
-java -cp $BIN interfaces.Main $MC_ADDRESS $MC_PORT $MCB_ADDRESS $MCB_PORT $MCR_ADDRESS $MCR_PORT
+cd storage
+java -cp ../$BIN interfaces.Main $MC_ADDRESS $MC_PORT $MCB_ADDRESS $MCB_PORT $MCR_ADDRESS $MCR_PORT
 pause
 echo "---------Finished Script---------"
