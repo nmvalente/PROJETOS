@@ -128,7 +128,7 @@ public class SendDataChannel extends Thread{
 							break;
 
 						case "GETCHUNK": // responde com CHUNK
-							Chunk c  = peer.chunks.find( m.getAddress() , m.head.getFileId() , m.head.getChunkNo() );
+							Chunk c  = peer.chunks.find( m.getAddress() , m.head.getFileId() , m.head.getChunkNr() );
 							if (c!=null)
 							{
 								try {
@@ -138,7 +138,7 @@ public class SendDataChannel extends Thread{
 								} catch (IOException e) // nao existe o ficheiro chunk
 								{
 									// remove referencia do chunk
-									peer.chunks.remove(m.getAddress(), m.head.getFileId(), m.head.getChunkNo());
+									peer.chunks.remove(m.getAddress(), m.head.getFileId(), m.head.getChunkNr());
 								}
 								group = MDR;
 							}
@@ -149,7 +149,7 @@ public class SendDataChannel extends Thread{
 							break;
 
 						case "REMOVED": // actualiza dados do Backup e replicationDeg
-							peer.files.removeSTORED(m.getAddress(), m.head.getFileId(), m.head.getChunkNo());
+							peer.files.removeSTORED(m.getAddress(), m.head.getFileId(), m.head.getChunkNr());
 							break;
 
 						case "CHUNK": // guarda o chunk para o Restauro
@@ -157,7 +157,7 @@ public class SendDataChannel extends Thread{
 							break;
 
 						case "STORED": // actualiza dados do Backup
-							peer.files.addSTORED(m.getAddress(), m.head.getFileId(), m.head.getChunkNo());
+							peer.files.addSTORED(m.getAddress(), m.head.getFileId(), m.head.getChunkNr());
 							break;
 						}
 
