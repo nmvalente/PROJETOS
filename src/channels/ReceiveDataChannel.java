@@ -6,43 +6,42 @@ import java.net.MulticastSocket;
 import interfaces.Main;
 import protocols.Peer;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ReceiveDataChannel extends Thread
-{
+public class ReceiveDataChannel extends Thread{
+
 	public static final int MAXBUFFER = 1024;
 
 	String name;
 	MulticastSocket socket;
 	Peer peer;
 
-	public ReceiveDataChannel(String name, MulticastSocket s, Peer peer)
-	{
+	public ReceiveDataChannel(String name, MulticastSocket s, Peer peer){
+
 		this.name = name;
 		this.socket = s;
 		this.peer   = peer;
 	}
 
-	public static String getCTS() // CurrentTimeStamp
-	{
-		SimpleDateFormat sdfDate = new SimpleDateFormat("[HH:mm:ss.SSS]");
-		Date now = new Date();
-		String strDate = sdfDate.format(now);
-		return strDate;
+	public String getCurrentTime(){
+
+		Date date = new Date();
+		return date.toString();
 	}
 
-	public void run()
-	{
+	public void run(){
+
 		try
 		{
 			if(name == "MC")
-				Main.windows.printlnReceiverMC(getCTS() + " - Started receiver thread :: "+ name);
+				Main.windows.printlnReceiverMC(getCurrentTime() + " - Started receiver thread :: "+ name);
 			if(name == "MDB")
-				Main.windows.printlnReceiverMDB(getCTS() + " - Started receiver thread :: "+ name);
+				Main.windows.printlnReceiverMDB(getCurrentTime() + " - Started receiver thread :: "+ name);
 			if(name == "MDR")
-				Main.windows.printlnReceiverMDR(getCTS() + " - Started receiver thread :: "+ name);
-		
+				Main.windows.printlnReceiverMDR(getCurrentTime() + " - Started receiver thread :: "+ name);
+
 		}
 		catch (ArithmeticException ex)
 		{
@@ -77,14 +76,14 @@ public class ReceiveDataChannel extends Thread
 
 					try
 					{
-						
+
 						if(name == "MC")
-							Main.windows.printlnReceiverMC(getCTS() + " - RECEIVED - " + msg);
+							Main.windows.printlnReceiverMC(getCurrentTime() + " - RECEIVED - " + msg);
 						if(name == "MDB")
-							Main.windows.printlnReceiverMDB(getCTS() + " - RECEIVED - " + msg);
+							Main.windows.printlnReceiverMDB(getCurrentTime() + " - RECEIVED - " + msg);
 						if(name == "MDR")
-							Main.windows.printlnReceiverMDR(getCTS() + " - RECEIVED - " + msg);
-											}
+							Main.windows.printlnReceiverMDR(getCurrentTime() + " - RECEIVED - " + msg);
+					}
 					catch (ArithmeticException ex)
 					{
 						if(name == "MC")
@@ -110,11 +109,11 @@ public class ReceiveDataChannel extends Thread
 		catch(IOException n) 
 		{
 			if(name == "MC")
-				Main.windows.printlnReceiverMC(getCTS() + " - Connection terminated");
+				Main.windows.printlnReceiverMC(getCurrentTime() + " - Connection terminated");
 			if(name == "MDB")
-				Main.windows.printlnReceiverMDB(getCTS() + " - Connection terminated");
+				Main.windows.printlnReceiverMDB(getCurrentTime() + " - Connection terminated");
 			if(name == "MDR")
-				Main.windows.printlnReceiverMDR(getCTS() + " - Connection terminated");
+				Main.windows.printlnReceiverMDR(getCurrentTime() + " - Connection terminated");
 		}
 	}
 }

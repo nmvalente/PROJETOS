@@ -115,7 +115,7 @@ public class BackupFile extends Ufile
         System.out.println("\n List of STORED backup chunks" );
         System.out.println(" file   : " + getFileName() );
         System.out.println(" fileId : " + getFileId() );
-        System.out.println("==========================================" );
+		System.out.println("\n**************************************************");
 
         for (; i<getNChunks()-1; i++)
         {
@@ -126,7 +126,7 @@ public class BackupFile extends Ufile
         lastpart = getFileSize() - ((getNChunks()-1) * Utils.PARTSIZE);
         System.out.printf("%2d ~ %d/%d , %s bytes\n", i, replicas.get(i).size(), desiredReplicationDeg, lastpart);
 
-        System.out.println("==========================================" );
+		System.out.println("\n**************************************************");
         System.out.printf( " Listed %d chunk%s.\n\n", i, ((i==1)?"":"s"));
     }
 
