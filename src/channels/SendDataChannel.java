@@ -57,7 +57,7 @@ public class SendDataChannel extends Thread{
 
 			DatagramPacket dg;
 			Message m;
-			Ufile u;
+			//Ufile u;
 			String reply,request;
 			int group = MC, r=0;
 			Random random = new Random();
