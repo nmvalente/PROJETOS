@@ -18,7 +18,7 @@ public class Head
 		this.fileId = fileId;
 	}
 
-	public Head(String messageType, String version, String fileId, int chunkNr)
+	public Head(String messageType, String version, String fileId, int chunkNo)
 	{
 		if (!(isMessageType(messageType) && isVersion(version)))
 			throw new IllegalArgumentException("Invalid Head Arguments");
@@ -29,7 +29,7 @@ public class Head
 		this.chunkNr = chunkNr;
 	}
 
-	public Head(String messageType, String version, String fileId, int chunkNr, int replicationDeg)
+	public Head(String messageType, String version, String fileId, int chunkNo, int replicationDeg)
 	{
 		if (!(isMessageType(messageType) && isVersion(version) && isReplicationDeg(replicationDeg)))
 			throw new IllegalArgumentException("Invalid Head Arguments");
@@ -125,10 +125,10 @@ public class Head
 		return ( vers.equals("1.0") );
 	}
 
-	/*private boolean isChunkNr(int num)
+	private boolean isChunkNo(int num)
 	{
 		return ( num >= 0 );
-	}*/
+	}
 
 	private boolean isReplicationDeg(int repl)
 	{

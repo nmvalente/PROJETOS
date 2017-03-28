@@ -136,7 +136,6 @@ public class Main
 		multicastSockets[2].leaveGroup(group[2]);
 		multicastSockets[2].close();
 		
-		in.close();
 		System.exit(0);
 	}
 

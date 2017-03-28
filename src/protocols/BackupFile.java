@@ -36,7 +36,7 @@ public class BackupFile extends Ufile
     public String getAllAddress()
     {
         int i=0;
-        //LinkedHashSet<String> l;
+        LinkedHashSet<String> l;
         String s = "{ ";
 
         for (; i<getNChunks()-1; i++)
@@ -146,7 +146,7 @@ public class BackupFile extends Ufile
             fis.read(data, 0, fsize);
 
             f.delete();
-            fis.close();
+
             return data;
         }
 
