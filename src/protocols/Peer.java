@@ -68,7 +68,9 @@ public class Peer
 
                     for (i=0; i < b.getNChunks(); i++)
                     {
-                        System.out.println("========================================================[ Waiting for next STORED reply" );
+                		System.out.println("\n**************************************************");
+
+                        System.out.println("> Waiting for next STORED reply" );
 
                         count=0;
                         nStored=0;
@@ -99,7 +101,7 @@ public class Peer
 
                         } while( count<5 && nStored<desiredReplicationDeg );
                     }
-            		System.out.println("******************************");
+            		System.out.println("\n**************************************************");
                     System.out.println(" File backup finished. " + ((b.isBackupReplicatedEnough()) ? "Successful" : "Incomplete") + ".\n");
 
                     b.list();
@@ -161,7 +163,7 @@ public class Peer
                 }
 
                 System.out.println(" Receiving chunk restore information");
-        		System.out.println("******************************");
+        		System.out.println("\n**************************************************");
 
                 do
                 {
@@ -180,7 +182,7 @@ public class Peer
 
                 } while( count<5 && !restoreFile.isComplete() );
 
-        		System.out.println("******************************");
+        		System.out.println("\n**************************************************");
                 System.out.println(" File restore finished. " + ((restoreFile.isComplete()) ? "Successful" : "Incomplete") + ".\n");
 
                 restoreFile.list();

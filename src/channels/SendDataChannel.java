@@ -9,12 +9,11 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Random;
+import java.util.Random; 
 
-public class SendDataChannel extends Thread
-{
+public class SendDataChannel extends Thread{
+	
 	public static final int MC  = 0;
 	public static final int MDB = 1;
 	public static final int MDR = 2;
@@ -23,8 +22,8 @@ public class SendDataChannel extends Thread
 	MulticastSocket[] socket;
 	Peer peer;
 
-	public SendDataChannel(InetAddress[] address, MulticastSocket[] socket, Peer peer)
-	{
+	public SendDataChannel(InetAddress[] address, MulticastSocket[] socket, Peer peer){
+		
 		this.address   = new InetAddress[3];
 		this.socket    = new MulticastSocket[3];
 
@@ -37,20 +36,17 @@ public class SendDataChannel extends Thread
 		this.peer         = peer;
 	}
 
-	public static String getCTS() // CurrentTimeStamp
-	{
-		SimpleDateFormat sdfDate = new SimpleDateFormat("[HH:mm:ss.SSS]");
-		Date now = new Date();
-		String strDate = sdfDate.format(now);
-		return strDate;
+	public String getCurrentTime(){
+
+		Date date = new Date();
+		return date.toString();
 	}
 
-	public void run()
-	{
+	public void run(){
 
 		try
 		{
-			Main.windows.printlnSendChannel( getCTS() + " - Started sender thread" );
+			Main.windows.printlnSendChannel( getCurrentTime() + " - Started sender thread" );
 		}
 		catch (ArithmeticException ex)
 		{
@@ -85,25 +81,25 @@ public class SendDataChannel extends Thread
 					{
 						switch( m.head.getMessageType() )
 						{
-							case "PUTCHUNK":
-								request = m.build();
-								group = MDB;
-								break;
+						case "PUTCHUNK":
+							request = m.build();
+							group = MDB;
+							break;
 
-							case "GETCHUNK":
-								request = m.build();
-								group = MC;
-								break;
+						case "GETCHUNK":
+							request = m.build();
+							group = MC;
+							break;
 
-							case "DELETE":
-								request = m.build();
-								group = MC;
-								break;
+						case "DELETE":
+							request = m.build();
+							group = MC;
+							break;
 
-							case "REMOVED":
-								request = m.build();
-								group = MC;
-								break;
+						case "REMOVED":
+							request = m.build();
+							group = MC;
+							break;
 						}
 
 						if ( request != null ) // envia um pedido
@@ -113,7 +109,7 @@ public class SendDataChannel extends Thread
 
 							try
 							{
-								Main.windows.printlnSendChannel( getCTS() + " - REQUEST SENT - " + m.simple() );
+								Main.windows.printlnSendChannel( getCurrentTime() + " - REQUEST SENT - " + m.simple() );
 							}
 							catch (ArithmeticException ex)
 							{
@@ -125,44 +121,44 @@ public class SendDataChannel extends Thread
 					{
 						switch( m.head.getMessageType() )
 						{
-							case "PUTCHUNK": // responde com STORED
-								peer.chunks.add( m );
-								reply = m.reply();
-								group = MC;
-								break;
+						case "PUTCHUNK": // responde com STORED
+							peer.chunks.add( m );
+							reply = m.reply();
+							group = MC;
+							break;
 
-							case "GETCHUNK": // responde com CHUNK
-								Chunk c  = peer.chunks.find( m.getAddress() , m.head.getFileId() , m.head.getChunkNo() );
-								if (c!=null)
+						case "GETCHUNK": // responde com CHUNK
+							Chunk c  = peer.chunks.find( m.getAddress() , m.head.getFileId() , m.head.getChunkNo() );
+							if (c!=null)
+							{
+								try {
+									String content;
+									content = new String(peer.chunks.file(m.getAddress(), c), "UTF-8");
+									reply = m.reply() + content;
+								} catch (IOException e) // nao existe o ficheiro chunk
 								{
-									try {
-										String content;
-										content = new String(peer.chunks.file(m.getAddress(), c), "UTF-8");
-										reply = m.reply() + content;
-									} catch (IOException e) // não existe o ficheiro chunk
-									{
-										// remove referencia do chunk
-										peer.chunks.remove(m.getAddress(), m.head.getFileId(), m.head.getChunkNo());
-									}
-									group = MDR;
+									// remove referencia do chunk
+									peer.chunks.remove(m.getAddress(), m.head.getFileId(), m.head.getChunkNo());
 								}
-								break;
+								group = MDR;
+							}
+							break;
 
-							case "DELETE": // apaga o ficheiro
-								peer.chunks.remove(m.getAddress(), m.head.getFileId());
-								break;
+						case "DELETE": // apaga o ficheiro
+							peer.chunks.remove(m.getAddress(), m.head.getFileId());
+							break;
 
-							case "REMOVED": // actualiza dados do Backup e replicationDeg
-								peer.files.removeSTORED(m.getAddress(), m.head.getFileId(), m.head.getChunkNo());
-								break;
+						case "REMOVED": // actualiza dados do Backup e replicationDeg
+							peer.files.removeSTORED(m.getAddress(), m.head.getFileId(), m.head.getChunkNo());
+							break;
 
-							case "CHUNK": // guarda o chunk para o Restauro
-								peer.restoreFile.add(m);
-								break;
+						case "CHUNK": // guarda o chunk para o Restauro
+							peer.restoreFile.add(m);
+							break;
 
-							case "STORED": // actualiza dados do Backup
-								peer.files.addSTORED(m.getAddress(), m.head.getFileId(), m.head.getChunkNo());
-								break;
+						case "STORED": // actualiza dados do Backup
+							peer.files.addSTORED(m.getAddress(), m.head.getFileId(), m.head.getChunkNo());
+							break;
 						}
 
 						if ( reply != null ) // envia resposta
@@ -183,7 +179,7 @@ public class SendDataChannel extends Thread
 
 							try
 							{
-								Main.windows.printlnSendChannel( getCTS() + " -   REPLY SENT - " + m.reply() );
+								Main.windows.printlnSendChannel( getCurrentTime() + " -   REPLY SENT - " + m.reply() );
 							}
 							catch (ArithmeticException ex)
 							{
@@ -197,9 +193,7 @@ public class SendDataChannel extends Thread
 		}
 		catch(IOException e) 
 		{
-			Main.windows.printlnSendChannel(getCTS() + " - Connection terminated");
-			// e.getMessage();
+			Main.windows.printlnSendChannel(getCurrentTime() + " - Connection terminated");
 		}
 	}
-	
 }

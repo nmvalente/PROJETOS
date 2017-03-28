@@ -36,24 +36,23 @@ public class RestoreFile extends Ufile
                 fileId;
     }
 
-    public void list()
-    {
+    public void list(){
+    	
         int i = 0;
 
         System.out.println("\n List of chunks");
         System.out.println(" file   : " + getFileName());
         System.out.println(" fileId : " + getFileId());
-        System.out.println("==========================================");
+		System.out.println("\n**************************************************");
 
         for (; i < getNChunks() - 1; i++) {
-            //System.out.println( temp.simple() );
             System.out.printf(" [%s] %2d ~ %d , %d\n", ((chunkList[i]) ? "yes" : ".no"), i, chunkList.length, getPartSize());
         }
 
         int lastpart = getFileSize() - ((getNChunks() - 1) * getPartSize());
         System.out.printf(" [%s] %2d ~ %d , %d bytes\n", ((chunkList[i]) ? "yes" : ".no"), i, chunkList.length, lastpart);
 
-        System.out.println("==========================================");
+		System.out.println("\n**************************************************");
         System.out.printf(" Listed %d chunk%s.\n\n", getNChunks(), ((i == 1) ? "" : "s"));
     }
 
