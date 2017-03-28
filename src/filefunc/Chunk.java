@@ -5,45 +5,47 @@ import message.Message;
 public class Chunk
 {
     private String fileId;
-    private int chunkNr;
-    private int replicationDegree;
+    private int chunkNo;
+    private int replicationDeg;
 
-    Chunk(String fileId, int chunkNr, int replicationDeg){
+    Chunk(String fileId, int chunkNo, int replicationDeg)
+    {
         this.fileId = fileId;
-        this.chunkNr = chunkNr;
-        this.replicationDegree = replicationDeg;
+        this.chunkNo = chunkNo;
+        this.replicationDeg = replicationDeg;
     }
 
-    Chunk(Message m){
+    Chunk(Message m)
+    {
         this.fileId = m.head.getFileId();
-        this.chunkNr = m.head.getChunkNr();
-        this.replicationDegree = m.head.getReplicationDeg();
+        this.chunkNo = m.head.getChunkNo();
+        this.replicationDeg = m.head.getReplicationDeg();
     }
 
-    public String getFileId(){
+    public String getFileId()
+    {
         return fileId;
     }
 
-    public int getChunkNr(){
-        return chunkNr;
+    public int getChunkNo()
+    {
+        return chunkNo;
     }
 
-    public int getReplicationDeg(){
-    	return replicationDegree; 
-    	}
+    public int getReplicationDeg() { return replicationDeg; }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Chunk{" +
                 ", fileId='" + fileId + '\'' +
-                ", chunkNr=" + chunkNr + '\'' +
-                ", replicationDegree=" + replicationDegree +
+                ", chunkNo=" + chunkNo + '\'' +
+                ", replicationDeg=" + replicationDeg +
                 '}';
     }
 
-    public String simple(){
+    public String simple() {
         return  fileId  + " , " +
-                chunkNr + " , " +
-                replicationDegree ;
+                chunkNo + " , " +
+                replicationDeg ;
     }
 }

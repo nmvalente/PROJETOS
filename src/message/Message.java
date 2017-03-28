@@ -224,17 +224,17 @@ public class Message
 		switch (head.getMessageType())
 		{
 			case "PUTCHUNK":
-				ss = head.getMessageType() + " " + head.getVersion() + " " + head.getFileId() + " " + head.getChunkNr() + " " + head.getReplicationDeg() + " " + CRLF2 + body.getMsg();
+				ss = head.getMessageType() + " " + head.getVersion() + " " + head.getFileId() + " " + head.getChunkNo() + " " + head.getReplicationDeg() + " " + CRLF2 + body.getMsg();
 				break;
 
 			case "STORED":
 			case "GETCHUNK":
 			case "REMOVED":
-				ss = head.getMessageType() + " " + head.getVersion() + " " + head.getFileId() + " " + head.getChunkNr() + " " + CRLF2;
+				ss = head.getMessageType() + " " + head.getVersion() + " " + head.getFileId() + " " + head.getChunkNo() + " " + CRLF2;
 				break;
 
 			case "CHUNK":
-				ss = head.getMessageType() + " " + head.getVersion() + " " + head.getFileId() + " " + head.getChunkNr() + " " + CRLF2 + body.getMsg();
+				ss = head.getMessageType() + " " + head.getVersion() + " " + head.getFileId() + " " + head.getChunkNo() + " " + CRLF2 + body.getMsg();
 				break;
 
 			case "DELETE":
@@ -252,11 +252,11 @@ public class Message
 		switch (head.getMessageType())
 		{
 			case "PUTCHUNK":
-				ss = "STORED" + " " + head.getVersion() + " " + head.getFileId() + " " + head.getChunkNr() + " " + CRLF2;
+				ss = "STORED" + " " + head.getVersion() + " " + head.getFileId() + " " + head.getChunkNo() + " " + CRLF2;
 				break;
 
 			case "GETCHUNK":
-				ss = "CHUNK" + " " + head.getVersion() + " " + head.getFileId() + " " + head.getChunkNr() + " " + CRLF2;
+				ss = "CHUNK" + " " + head.getVersion() + " " + head.getFileId() + " " + head.getChunkNo() + " " + CRLF2;
 				break;
 		}
 

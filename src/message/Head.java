@@ -4,7 +4,7 @@ public class Head
 	private String messageType;  		   // = {"PUTCHUNK","STORED","GETCHUNK","CHUNK","DELETE","REMOVED"};
 	private String version; 			   // versao do protocolo
 	private String fileId; 				   // nome em SHA256
-	private int chunkNr; 				   // nº de chunk
+	private int chunkNo; 				   // nº de chunk
 	private int replicationDeg;			   // nº de cópias
 
 
@@ -26,7 +26,7 @@ public class Head
 		this.messageType = messageType;
 		this.version = version;
 		this.fileId = fileId;
-		this.chunkNr = chunkNr;
+		this.chunkNo = chunkNo;
 	}
 
 	public Head(String messageType, String version, String fileId, int chunkNo, int replicationDeg)
@@ -37,7 +37,7 @@ public class Head
 		this.messageType = messageType;
 		this.version = version;
 		this.fileId = fileId;
-		this.chunkNr = chunkNr;
+		this.chunkNo = chunkNo;
 		this.replicationDeg = replicationDeg;
 	}
 
@@ -56,9 +56,9 @@ public class Head
 		return fileId;
 	}
 
-	public int getChunkNr()
+	public int getChunkNo()
 	{
-		return chunkNr;
+		return chunkNo;
 	}
 
 	public int getReplicationDeg()
@@ -74,7 +74,7 @@ public class Head
 				", replicationDeg=" + replicationDeg + '\'' +
 				", version='" + version + '\'' +
 				", fileId='" + fileId + '\'' +
-				", chunkNo=" + chunkNr +
+				", chunkNo=" + chunkNo +
 				'}';
 	}
 
@@ -86,7 +86,7 @@ public class Head
 				return 	messageType + " , " +
 						version + " , " +
 						fileId + " , " +
-						chunkNr + " , " +
+						chunkNo + " , " +
 						replicationDeg ;
 
 			case "STORED":
@@ -96,7 +96,7 @@ public class Head
 				return 	messageType + " , " +
 						version + " , " +
 						fileId + " , " +
-						chunkNr ;
+						chunkNo ;
 
 			case "DELETE":
 				return 	messageType + " , " +

@@ -5,233 +5,281 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+public class Ufile
+{
+    private static final int PARTSIZE = 64000;
 
-public class Ufile{
-	private String fileName;
-	private int fileSize;
-	private int nChunks;
-	private File file = null;
+    private String fileName;
+    private int fileSize;
+    private int nChunks;
+    private File file = null;
 
-	public Ufile(String fileName){
-		this.fileName = fileName;
-		file = new File(fileName);
-		fileSize = (int) file.length();
-		nChunks  = (int) Math.ceil(fileSize / Math.max(1.0, Utils.PARTSIZE *1.0));
-	}
+    public Ufile(String fileName)
+    {
+        this.fileName = fileName;
 
-	public Ufile(Ufile u){
-		this.fileName = u.fileName;
-		fileSize = u.fileSize;
-		nChunks  = u.nChunks;
-	}
+        file = new File(fileName);
+        fileSize = (int) file.length();
+        nChunks  = (int) Math.ceil(fileSize / Math.max(1.0, PARTSIZE *1.0));
+    }
 
-	public String getFileName(){
-		return fileName;
-	}
+    public Ufile(Ufile u)
+    {
+        this.fileName = u.fileName;
+        fileSize = u.fileSize;
+        nChunks  = u.nChunks;
+    }
 
-	public int getFileSize(){
-		return fileSize;
-	}
+    public String getFileName()
+    {
+        return fileName;
+    }
 
-	public int getNChunks(){
-		return nChunks;
-	}
+    public int getPartSize()
+    {
+        return PARTSIZE;
+    }
 
-	public File getFile(){
-		return file; 
-	}
+    public int getFileSize()
+    {
+        return fileSize;
+    }
 
-	@Override
-	public String toString(){
-		return "Ufile{" +
-				"fileName='" + fileName + '\'' +
-				", fileSize=" + fileSize +
-				", nChunks=" + nChunks +
-				", file=" + file +
-				'}';
-	}
+    public int getNChunks()
+    {
+        return nChunks;
+    }
 
-	public String fileName(){
-		return  fileName;
-	}
+    public File getFile() { return file; }
 
-	public int fileSize(){
-		return  fileSize;
-	}
+    @Override
+    public String toString() {
+        return "Ufile{" +
+                "fileName='" + fileName + '\'' +
+                ", fileSize=" + fileSize +
+                ", nChunks=" + nChunks +
+                ", file=" + file +
+                '}';
+    }
 
-	public void info(){
-		System.out.println("file     : " + fileName);
-		System.out.println("exists   ? " + file.exists());
-		System.out.println("readable ? " + file.canRead());
-	}
+    public String fileName() {
+        return  fileName;
+    }
+    
+    public int fileSize() {
+        return  fileSize;
+    }
 
-	public void split(){
-		FileInputStream inStream;
-		String newFileName, fileId = sha256();
-		FileOutputStream fPartitioned;
+    public void info()
+    {
+        System.out.println("file     : " + fileName);
+        System.out.println("exists   ? " + file.exists());
+        System.out.println("readable ? " + file.canRead());
+    }
 
-		int i, chunkNo = 0, read = 0, length = Utils.PARTSIZE, currentFileSize = fileSize;
+    public void split()
+    {
+        FileInputStream inputStream;
+        String newFileName, fileId=sha256();
+        FileOutputStream filePart;
 
-		byte[] chunk;
+        int     i,
+                chunkNo = 0,
+                read = 0,
+                readLength = PARTSIZE,
+                currentFileSize = fileSize;
 
-		try{
-			inStream = new FileInputStream(file);
+        byte[] byteChunkPart;
 
-			System.out.println("\n File Split" );
-			System.out.println(" file   : " + getFileName() );
-			System.out.println(" fileId : " + fileId );
-			System.out.println("******************************");
+        try
+        {
+            inputStream = new FileInputStream(file);
 
-			for (i = 0; currentFileSize > 0; i++, chunkNo++){
-				length = Math.min(currentFileSize, Utils.PARTSIZE);
-				chunk = new byte[length];
+            System.out.println("\n File Split" );
+            System.out.println(" file   : " + getFileName() );
+            System.out.println(" fileId : " + fileId );
+    		System.out.println("******************************");
 
-				read = inStream.read(chunk, 0, length);
-				currentFileSize -= read;
+            for (i = 0; currentFileSize > 0; i++, chunkNo++)
+            {
+                readLength = Math.min(currentFileSize, PARTSIZE);
 
-				assert (read == chunk.length);
+                // System.out.println(" " + currentFileSize + " / " + readLength);
 
-				// sha256.partX - Sha-256
-				newFileName = fileId + ".part" + chunkNo;
+                byteChunkPart = new byte[readLength];
 
-				System.out.printf("%2d ~ %s , %d bytes\n", i, newFileName, length);
+                read = inputStream.read(byteChunkPart, 0, readLength);
+                currentFileSize -= read;
 
-				fPartitioned = new FileOutputStream(new File(newFileName));
-				fPartitioned.write(chunk);
-				fPartitioned.flush();
-				fPartitioned.close();
-			}
+                assert (read == byteChunkPart.length);
 
-			System.out.println("******************************");
-			System.out.printf(" File split into %d chunk%s.\n\n", i, ((i == 1) ? "" : "s"));
+                // sha256.partX - Sha-256
+                newFileName = fileId + ".part" + chunkNo;
 
-			inStream.close();
+                System.out.printf("%2d ~ %s , %d bytes\n", i, newFileName, readLength);
 
-		}
-		catch (IOException e){
-			e.printStackTrace();
-		}
-	}
+                filePart = new FileOutputStream(new File(newFileName));
+                filePart.write(byteChunkPart);
+                filePart.flush();
+                filePart.close();
 
-	public void merge(){
-		File ofile = new File(fileName);
+            }
 
-		FileOutputStream fos;
-		FileInputStream fis;
-		byte[] fileBytes;
-		int nRead = 0;
+    		System.out.println("******************************");
+            System.out.printf(" File split into %d chunk%s.\n\n", i, ((i == 1) ? "" : "s"));
 
-		List<File> list = new ArrayList<File>();
+            inputStream.close();
 
-		String fileId = sha256();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-		for (int i = 0 ; i < nChunks ; i++){
-			list.add(new File(fileId + File.separator + fileId + ".part" + i));
-		}
+    public void merge()
+    {
+        File ofile = new File(fileName);
 
-		try{
-			fos = new FileOutputStream(ofile,true);
+        FileOutputStream fos;
+        FileInputStream fis;
+        byte[] fileBytes;
+        int bytesRead = 0;
 
-			for (File file : list){
-				fis = new FileInputStream(file);
-				fileBytes = new byte[(int) file.length()];
-				nRead = fis.read(fileBytes, 0,(int)  file.length());
-				assert(nRead == fileBytes.length);
-				assert(nRead == (int) file.length());
-				fos.write(fileBytes);
-				fos.flush();
-				fileBytes = null;
-				fis.close();
-				fis = null;
-			}
+        List<File> list = new ArrayList<File>();
 
-			fos.close();
-			fos = null;
-		}
-		catch (Exception exception){
-			exception.printStackTrace();
-		}
-	}
+        String fileId = sha256();
 
-	public String sha256(){
-		String hashname = null;
-		try{
-			hashname = Hash2String(String2Hash(fileName));
-		}
-		catch(NoSuchAlgorithmException e){
-			e.printStackTrace();
-		}
-		return hashname;
-	}
+        for (int i = 0; i<nChunks; i++)
+        {
+            list.add(new File( fileId + File.separator + fileId + ".part" + i));
+        }
 
-	/*
+        try
+        {
+            fos = new FileOutputStream(ofile,true);
+
+            for (File file : list)
+            {
+                fis = new FileInputStream(file);
+                fileBytes = new byte[(int) file.length()];
+                bytesRead = fis.read(fileBytes, 0,(int)  file.length());
+                assert(bytesRead == fileBytes.length);
+                assert(bytesRead == (int) file.length());
+                fos.write(fileBytes);
+                fos.flush();
+                fileBytes = null;
+                fis.close();
+                fis = null;
+            }
+
+            fos.close();
+            fos = null;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+    }
+
+    public String sha256()
+    {
+        String hashname = null;
+
+        try
+        {
+            hashname = Hash2String(String2Hash(fileName));
+        }
+        catch(NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+
+        return hashname;
+    }
+
+    /*
 	 * source from http://www.mkyong.com/java/java-sha-hashing-example/
 	 */
-	private byte[] String2Hash(String msg) throws NoSuchAlgorithmException{
-		// algorithm can be "MD5", "SHA-1", "SHA-256"
-		MessageDigest digest = MessageDigest.getInstance("SHA-256");
-		byte[] inputBytes = msg.getBytes(); // get bytes array from message
-		byte[] hashBytes = digest.digest(inputBytes);
-		return hashBytes; // convert hash bytes to string (usually in hexadecimal form)
-	}
+    private byte[] String2Hash(String msg) throws NoSuchAlgorithmException
+    {
+        // algorithm can be "MD5", "SHA-1", "SHA-256"
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] inputBytes = msg.getBytes(); // get bytes array from message
+        byte[] hashBytes = digest.digest(inputBytes);
+        return hashBytes; // convert hash bytes to string (usually in hexadecimal form)
+    }
 
-	private String Hash2String(byte[] bytes) throws NoSuchAlgorithmException{
-		StringBuffer result = new StringBuffer();
-		for (byte byt : bytes) result.append(Integer.toString((byt & 0xff) + 0x100, 16).substring(1));
-		return result.toString();
-	}
+    private String Hash2String(byte[] bytes) throws NoSuchAlgorithmException
+    {
+        StringBuffer result = new StringBuffer();
+        for (byte byt : bytes) result.append(Integer.toString((byt & 0xff) + 0x100, 16).substring(1));
+        return result.toString();
+    }
 
 
-	public void addFolder(String name) throws FileNotFoundException{
-		File dir = new File(name);
-		if (!dir.exists()){
-			dir.mkdir();
-		}
-	}
+    public void addFolder(String name) throws FileNotFoundException
+    {
+        File dir = new File( name );
 
-	protected void addChunk(String name, String content) throws IOException{
-		FileOutputStream fos;
+        if (!dir.exists())
+        {
+            dir.mkdir();
+        }
+    }
 
-		fos = new FileOutputStream(new File(name));
-		fos.write(content.getBytes());
-		fos.close();// fechei aqui
-	}
+    public void addChunk(String name, String content) throws IOException
+    {
+        FileOutputStream fos;
 
-	// source from http://www.java2s.com/Tutorial/Java/0180__File/Removeadirectoryandallofitscontents.htm
-	public static boolean removeDirectory(File directory){
-	
-		if(directory == null)
-			return false;
-		if(!directory.exists())
-			return true;
-		if(!directory.isDirectory())
-			return false;
+        fos = new FileOutputStream(new File( name ));
+        fos.write(content.getBytes() );
+    }
 
-		String[] list = directory.list();
+    // source from http://www.java2s.com/Tutorial/Java/0180__File/Removeadirectoryandallofitscontents.htm
+    public static boolean removeDirectory(File directory)
+    {
+        // System.out.println("removeDirectory " + directory);
 
-		// Some JVMs return null for File.list() when the
-		// directory is empty.
-		if(list != null){
-			for(int i = 0 ; i < list.length ; i++){
-				File entry = new File(directory, list[i]);
-				if(entry.isDirectory()){
-					if (!removeDirectory(entry))
-						return false;
-				}
-				else{
-					if(!entry.delete())
-						return false;
-				}
-			}
-		}
+        if (directory == null)
+            return false;
+        if (!directory.exists())
+            return true;
+        if (!directory.isDirectory())
+            return false;
 
-		return directory.delete();
-	}
+        String[] list = directory.list();
 
-	public void removeFile(String path){
-		File aux = new File(path);
-		if(aux.exists()){
-			aux.delete();
-		}
-	}
+        // Some JVMs return null for File.list() when the
+        // directory is empty.
+        if (list != null) {
+            for (int i = 0; i < list.length; i++) {
+                File entry = new File(directory, list[i]);
+
+                //        System.out.println("\tremoving entry " + entry);
+
+                if (entry.isDirectory())
+                {
+                    if (!removeDirectory(entry))
+                        return false;
+                }
+                else
+                {
+                    if (!entry.delete())
+                        return false;
+                }
+            }
+        }
+
+        return directory.delete();
+    }
+
+    public void removeFile(String filepath)
+    {
+        File f = new File(filepath);
+        if ( f.exists() )
+        {
+            f.delete();
+        }
+    }
 }

@@ -24,4 +24,5 @@ javac -d $BIN src/channels/*.java src/filefunc/*.java src/interfaces/*.java src/
 echo "-------------Running-------------"
 cd storage
 java -cp ../$BIN interfaces.Main $MC_ADDRESS $MC_PORT $MCB_ADDRESS $MCB_PORT $MCR_ADDRESS $MCR_PORT
+pause
 echo "---------Finished Script---------"
