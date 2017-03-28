@@ -10,23 +10,21 @@ public class FileManager
 {
 	private ArrayList<Ufile> fileList;
 
-	public FileManager()
-	{
+	public FileManager(){
 		fileList = new ArrayList<Ufile>();
 	}
 
-	public ArrayList<Ufile> getFileList() { return fileList; }
+	public ArrayList<Ufile> getFileList(){
+		return fileList; 
+		}
 
-	public void add(Ufile u)
-	{
+	public void add(Ufile u){
 		fileList.add(u);
 	}
 
-	public boolean add(String pathfile)
-	{
+	public boolean add(String pathfile){
 		File f = new File(pathfile);
-		if ( !f.isFile() )
-		{
+		if (!f.isFile()){
 			return false;
 		}
 
@@ -36,16 +34,13 @@ public class FileManager
 		return true;
 	}
 
-	public boolean remove(String fileName)
-	{
+	public boolean remove(String fileName){
 		Ufile temp;
 
-		for (Iterator<Ufile> it = fileList.iterator(); it.hasNext();)
-		{
+		for (Iterator<Ufile> it = fileList.iterator(); it.hasNext();){
 			temp = it.next();
 
-			if (temp.getFileName().equals(fileName))
-			{
+			if (temp.getFileName().equals(fileName)){
 				it.remove();
 				return true;
 			}
@@ -54,16 +49,13 @@ public class FileManager
 		return false;
 	}
 
-	public Ufile find(String fileName)
-	{
+	public Ufile find(String fileName){
 		Ufile temp;
 
-		for (Iterator<Ufile> it = fileList.iterator(); it.hasNext();)
-		{
+		for (Iterator<Ufile> it = fileList.iterator(); it.hasNext();){
 			temp = it.next();
 
-			if (temp.getFileName().equals(fileName))
-			{
+			if (temp.getFileName().equals(fileName)){
 				return temp;
 			}
 		}
@@ -71,21 +63,18 @@ public class FileManager
 		return null;
 	}
 
-	public void getAllFilesFromStorage()
-	{
+	public void getAllFilesFromStorage(){
 		File folder = new File(".");
 		File[] listOfFiles = folder.listFiles();
 
-		for (int i = 0; i < listOfFiles.length; i++)
-		{ 
-			if (listOfFiles[i].isFile())
-			{
+		for (int i = 0; i < listOfFiles.length; i++){ 
+			if (listOfFiles[i].isFile()){
 				add(listOfFiles[i].getName());
 			}
 		}
 	}
 
-	public String rightpad(String text, int length) {
+	public String rightpad(String text, int length){
 		return String.format("%-" + length + "." + length + "s", text);
 	}
 
@@ -148,19 +137,15 @@ public class FileManager
 		return 0;
 	}
 
-	public void addSTORED(String address, String fileId, int chunkNo)
-	{
+	public void addSTORED(String address, String fileId, int chunkNo){
 		Ufile temp;
 		BackupFile b;
 
-		for (Iterator<Ufile> it = fileList.iterator(); it.hasNext();)
-		{
+		for(Iterator<Ufile> it = fileList.iterator(); it.hasNext();){
 			temp = it.next();
 
-			if ( temp instanceof BackupFile )
-			{
-				if ( ((BackupFile) temp).getFileId().equals(fileId) )
-				{
+			if(temp instanceof BackupFile){
+				if(((BackupFile) temp).getFileId().equals(fileId)){
 					b = (BackupFile) temp;
 					b.incrSTORED(chunkNo,address);
 
@@ -171,19 +156,15 @@ public class FileManager
 		}
 	}
 
-	public void removeSTORED(String address, String fileId, int chunkNo)
-	{
+	public void removeSTORED(String address, String fileId, int chunkNo){
 		Ufile temp;
 		BackupFile b;
 
-		for (Iterator<Ufile> it = fileList.iterator(); it.hasNext();)
-		{
+		for(Iterator<Ufile> it = fileList.iterator(); it.hasNext();){
 			temp = it.next();
 
-			if ( temp instanceof BackupFile )
-			{
-				if ( ((BackupFile) temp).getFileId().equals(fileId) )
-				{
+			if (temp instanceof BackupFile){
+				if(((BackupFile) temp).getFileId().equals(fileId)){
 					b = (BackupFile) temp;
 					b.decrSTORED(chunkNo,address);
 
@@ -193,8 +174,7 @@ public class FileManager
 		}
 	}
 
-	public BackupFile backup(int fileIndex, int desiredReplicationDeg)
-	{
+	public BackupFile backup(int fileIndex, int desiredReplicationDeg){
 		Ufile u  = fileList.get(fileIndex);
 		BackupFile b = new BackupFile(u.getFileName(), desiredReplicationDeg);
 
@@ -217,5 +197,4 @@ public class FileManager
 		System.out.println("0 - Quit\n");
 		System.out.printf("Option [0-3] > ");
 	}
-
 }

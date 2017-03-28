@@ -120,10 +120,10 @@ public class BackupFile extends Ufile
         for (; i<getNChunks()-1; i++)
         {
             //System.out.println( temp.simple() );
-            System.out.printf("%2d ~ %d/%d , %s bytes\n", i, replicas.get(i).size(), desiredReplicationDeg, getPartSize());
+            System.out.printf("%2d ~ %d/%d , %s bytes\n", i, replicas.get(i).size(), desiredReplicationDeg, Utils.PARTSIZE);
         }
 
-        lastpart = getFileSize() - ((getNChunks()-1) * getPartSize());
+        lastpart = getFileSize() - ((getNChunks()-1) * Utils.PARTSIZE);
         System.out.printf("%2d ~ %d/%d , %s bytes\n", i, replicas.get(i).size(), desiredReplicationDeg, lastpart);
 
         System.out.println("==========================================" );
