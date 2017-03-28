@@ -6,8 +6,6 @@ import java.net.MulticastSocket;
 import interfaces.Main;
 import protocols.Peer;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ReceiveDataChannel extends Thread{

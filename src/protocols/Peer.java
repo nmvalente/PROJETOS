@@ -31,7 +31,8 @@ public class Peer
     	
         BackupFile b;
 
-        Scanner in = new Scanner(System.in);
+        @SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
 
         int index=0,
             desiredReplicationDeg=0,
@@ -123,20 +124,23 @@ public class Peer
             System.out.println(" Invalid file index.");
         }
         
+        
         return 0;
     }
 
-    public int restore(){
+    @SuppressWarnings("static-access")
+	public int restore(){
     	
         BackupFile b;
 
-        Scanner in = new Scanner(System.in);
+        @SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
 
         int     index=0,
                 i=0,
                 count=0,
                 fsize;
-        String msg = null;
+        //String msg = null;
 
         // Lista de ficheiros
         if(files.printAllFilesStored(2) == -1)
@@ -212,12 +216,13 @@ public class Peer
     	
         BackupFile b;
 
-        Scanner in = new Scanner(System.in);
+        @SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
 
         int index=0,
                 i=0,
                 fsize;
-        String msg = null;
+        //String msg = null;
 
         // Lista de ficheiros
         if(files.printAllFilesStored(3) == -1)
